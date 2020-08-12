@@ -1,0 +1,11 @@
+#!/bin/busybox sh
+
+echo "Initramfs Test"
+
+mount -t proc none /proc
+mount -t sysfs none /sys
+
+read && exec /bin/sh || echo
+
+# stop here
+exec /bin/sh
