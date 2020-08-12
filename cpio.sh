@@ -15,13 +15,12 @@ chmod 755 busybox/_install/init
 rm -f busybox/_install/linuxrc
 
 rm -rf _install/
-mkdir _install/
-cp -r busybox/_install _install/
+cp -r busybox/_install/ .
 
 cd _install/
-mkdir -p {proc,sys,etc,etc/init.d,lib,mnt,tmp}
+mkdir -p {dev,proc,sys,etc,etc/init.d,lib,mnt,tmp}
 rm -rf dev
-../makenodes.sh
+# ../makenodes.sh
 rm -rf ../initramfs.cpio
 find . -print0 | cpio --null -H newc -o > ../initramfs.cpio
 echo "Wrote initramfs.cpio"

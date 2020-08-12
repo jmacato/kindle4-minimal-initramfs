@@ -14,11 +14,6 @@ mknod initctl p
 mknod kmem c 1 2
 mknod kmsg c 1 11
 mknod mem c 1 1
-mknod mmcblk0 b 179 0
-mknod mmcblk0p1 b 179 1
-mknod mmcblk0p2 b 179 2
-mknod mmcblk0p3 b 179 3
-mknod mmcblk0p4 b 179 4
 mknod network_latency c 10 61
 mknod network_throughput c 10 60
 mknod null c 1 3

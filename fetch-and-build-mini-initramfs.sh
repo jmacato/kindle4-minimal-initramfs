@@ -2,7 +2,15 @@
 
 set -e
 
-git clone git://busybox.net/busybox.git --depth=1 busybox
+echo "Cloning latest BusyBox..."
+
+if [ ! -d "./busybox" ]; then
+    git clone git://busybox.net/busybox.git --depth=1 busybox
+fi
+
+echo "Need root privilege to continue..."
+
+sudo rm busybox/.config
 
 cp config busybox/.config
 
