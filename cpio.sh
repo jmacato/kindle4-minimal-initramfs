@@ -18,9 +18,9 @@ rm -rf _install/
 cp -r busybox/_install/ .
 
 cd _install/
-mkdir -p {dev,proc,sys,etc,etc/init.d,lib,mnt,tmp}
 rm -rf dev
-# ../makenodes.sh
+mkdir -p {dev,proc,sys,lib,mnt,tmp}
+mknod dev/console c 5 1 # make a fake /dev/console to make sh not crash
 rm -rf ../initramfs.cpio
 find . -print0 | cpio --null -H newc -o > ../initramfs.cpio
 echo "Wrote initramfs.cpio"
