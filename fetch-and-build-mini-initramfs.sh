@@ -5,7 +5,7 @@ set -e
 echo "Cloning latest BusyBox..."
 
 if [ ! -d "./busybox" ]; then
-    git clone git://busybox.net/busybox.git --depth=1 busybox
+    git clone git://busybox.net/busybox.git -b 1_32_stable --depth=1 busybox
 fi
 
 echo "Need root privilege to continue..."
