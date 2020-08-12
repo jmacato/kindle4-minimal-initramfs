@@ -10,7 +10,7 @@ fi
 
 echo "Need root privilege to continue..."
 
-sudo rm busybox/.config
+sudo rm -f busybox/.config
 
 cp config busybox/.config
 
