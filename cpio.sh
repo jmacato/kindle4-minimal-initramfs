@@ -19,11 +19,19 @@ cp -r busybox/_install/ .
 
 cd _install/
 rm -rf dev
-mkdir -p {dev,proc,sys,lib,mnt,tmp}
+mkdir -p {dev,proc,sys,lib,mnt,tmp,etc}
+
 mknod dev/console c 5 1 # make a fake /dev/console to make sh not crash
+
+# dont forget to setup your kernel to have
+# at least 7 loop devices:
+# using CONFIG_BLK_DEV_LOOP=y
+# and   CONFIG_BLK_DEV_LOOP_MIN_COUNT=7
+
 rm -rf ../initramfs.cpio
 find . -print0 | cpio --null -H newc -o > ../initramfs.cpio
 echo "Wrote initramfs.cpio"
 
+chown -R $1 ../busybox
 chown -R $1 ../_install
 chown -R $1 ../initramfs.cpio

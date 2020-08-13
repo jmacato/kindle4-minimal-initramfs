@@ -1,17 +1,42 @@
 #!/bin/sh
 
+mount -t devtmpfs none /dev
+mount -t proc proc /proc
+mount -t sysfs sysfs /sys
+
 echo "Press [Enter] to go to Initramfs Prompt..."
 
 read -t 3 -n 1 answer
 
 if [ $? == 0 ]; then
-  echo "Welcome to Kindle 4th Generation Initramfs Prompt!"
-
-  mount -t devtmpfs none /dev
-  mount -t proc none /proc
-  mount -t sysfs none /sys
-
-  exec /bin/sh
+    echo "Welcome to Kindle 4th Generation Initramfs Prompt!"
+    exec /bin/sh
 else
-  exit
+    echo "Initramfs > Loading Internal eMMC FAT32 Partition..."
+    mount --make-private /
+    losetup -o 8192 /dev/loop0 /dev/mmcblk0p4
+    
+    mkdir -p /mnt/internal
+    mount -t vfat -o defaults,noatime,utf8,noexec,shortname=mixed /dev/loop0 /mnt/internal
+    
+    echo "Initramfs > Loading Root Filesystem from image file..."
+    losetup /dev/loop1 /mnt/internal/fread/image.ext4
+    
+    mkdir -p /mnt/userland
+    mount -t ext4 -o defaults,noatime /dev/loop1 /mnt/userland
+    
+    mkdir -p /mnt/userland/mnt/internal
+    mount --move /mnt/internal /mnt/userland/mnt/internal
+    
+    mkdir -p /mnt/userland/dev
+    mkdir -p /mnt/userland/proc
+    mkdir -p /mnt/userland/sys
+
+    mount -o bind /dev /mnt/userland/dev
+    mount -o bind /proc /mnt/userland/proc
+    mount -o bind /sys /mnt/userland/sys
+
+    echo "Initramfs > Mount Complete. Initializing Root Filesystem..."
+
+    exec chroot /mnt/userland /sbin/init
 fi
